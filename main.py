@@ -10,7 +10,6 @@ try:
     import bz2
     import gzip
     from pathlib import Path
-    import subprocess
     import shutil
     import re
     import hashlib
@@ -196,151 +195,7 @@ while True:
                 break
             
             clear()
-    ########################################################################################## Mode 2 # Archive depictions
-    # I'll work on it later... 
-    elif mode == "9999999":
-"""
-        # Define the prefix to append
-        prefix = "https://web.archive.org/web/20140130003333if_/"
-        pdone = 0
 
-        # Function to run before appending each line
-        def pre_append_processing(line):
-            global pdone
-            global URL
-            global s
-            global m
-            global h
-            global sec
-            global cooldown
-            global p
-            pdone += 1
-            secsofar = 0
-
-            # fancy cooldown animation
-            chars = "/-\|"
-            idx = 0
-            
-            while cooldown > secsofar:
-
-                seconds_remaining = cooldown - secsofar
-                print(f"\r[{chars[idx % len(chars)]}] {round(int(seconds_remaining))} waiting for cooldown...", end="")
-
-                secsofar += 0.2
-                idx = (idx + 1) % len(chars)
-                sleep(0.2)
-
-            print(f"\rRequesting data...", end="")
-            print(f"\r", end="")
-                    
-            if line.startswith("Depiction: "):
-                URL = line[len("Depiction: "):].strip()
-
-                # Rate limit prevention (I lost two 10-hour runs because of this ;-;)
-                while True:
-                    try:
-                        response = requests.get(f"https://web.archive.org/web/20140130003333if_/{URL}")
-                        break
-                    except:
-                        print(f"[!] Error while requesting URL web.archive.org/web/20140130003333if_/{URL}.\nTrying again in 5 minutes. (Rate limit prevention)")
-                        sleep(300)
-
-                # Unreadable time calculation
-                psf = p - pdone
-                s = psf * cooldown
-                h = s // 3600
-                m = (s % 3600) // 60
-                sec = s % 60
-                
-                # Is the URL dead? (e.g. not directs to a wayback machine page, to techradar, or to an older save of modmyi's homepage instead of the depiction.)
-                if "The Wayback Machine is an initiative" in response.text or "techradar" in response.text.lower() or "tear down" in response.text.lower(): 
-                    print(f"{h}hr {m}min / Dead (not archived) [{URL}]")
-                    return False
-                else:
-                    print(f"{h}hr {m}min / Live (archived)     [{URL}]") # the link was archived by the wayback machine.
-                    return True
-                
-            elif line.lower().startswith("homepage:"):
-                if len(chpurl) > 0:
-                    new_line = f"Homepage: {chpurl}\n" # Links homepage from dead depiction to the specified page
-                    return new_line
-                else:
-                    return line
-
-            else:
-                return True # Keep the line unchanged if it doesn't start with "Depiction: " or "Homepage: "
-
-        def process_file(input_file, output_file):
-
-            try:
-                with open(input_file, 'r', encoding='utf-8') as infile, open(output_file, 'w', encoding='utf-8') as outfile:
-                    
-                    for line in infile:
-
-                        if line.startswith("Depiction: "):
-                            write_line = pre_append_processing(line)
-                            
-                            if isinstance(write_line, str):
-                                outfile.write(write_line)
-
-                            elif write_line:
-                                new_line = f"Depiction: {prefix}{URL}\n"
-                                outfile.write(new_line)
-
-                        else:
-                            outfile.write(line)
-                    
-                    print(f"File processing complete. Modified content saved to '{output_file}'.")
-
-            except KeyboardInterrupt: # Doesn't work (never saves packages file) but too lazy to remove
-                print("Keyboard interrupt detected. Saving current progress and exiting.")
-                outfile.close()
-                infile.close()
-                exit()
-
-        if __name__ == "__main__":
-            global p
-            input_file = "_Packages.txt"
-            output_file = "Modified_Packages.txt"
-            
-            with open(input_file, "r") as in_file:
-                lines = in_file.readlines()
-                p = 0
-                for line in lines:
-                    if "Package" in line:
-                        p += 1
-
-            print(f"{p} packages to process\nThis script takes an existing Packages file and replaces the Depiction section\nwith a wayback machine link if it was previously archived.\nIf it was not archived, the link gets removed so users can see the description of the package in the Cydia app.\nTo archive existing depiction links, see Depiction Archiver in the main menu.\n")
-
-            while True:
-                try:
-                    cooldown = input("Enter cooldown in seconds (recommended is 60 seconds to prevent rate limiting)\n> ")
-                    chpurl = input("\nEnter a custom homepage URL (see the github page for more info) or leave blank to keep default.\n> ")
-                    cooldown = int(cooldown)
-                    if cooldown <= 0:
-                        raise ValueError("Cooldown should be a positive number.")
-
-                    # Another unreadable time calculation
-                    s = p * cooldown
-                    h = s // 3600
-                    m = (s % 3600) // 60
-                    sec = s % 60
-                    
-                    # Print the estimated time in custom format
-                    print(f"Time estimated: {h}hr {m}min {sec}sec")
-                    
-                    break
-                except ValueError:
-                    print("Invalid input. Please enter a valid positive integer for cooldown.")
-                except Exception as e:
-                    print(f"Error: {e}")
-
-            input("Press ENTER to start, or enter CTRL + C to exit.")
-
-            process_file(input_file, output_file)
-
-
-"""
         
     ########################################################################################## Mode 3 # Check for archived depictions
     elif mode == "2": 
@@ -781,7 +636,7 @@ Author: unknown
                             os.rename(f"./temp/{file}", f"./sort/__cracked/{file}")
                             print(f"    [{debsdone}/{deb_count}] Sorted {file} to ./sort/__cracked/.")
                         """
-                        if:
+                        if True:
 
                             # Not in any repo stated above
 
